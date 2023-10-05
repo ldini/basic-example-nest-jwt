@@ -4,8 +4,8 @@ import { RegisterDto } from './dto/register.dto';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { User } from 'src/users/entities/user.entity';
+import { Role } from 'src/common/enum/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -14,14 +14,14 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register({ name, email, password }: RegisterDto) {
+  async register({ name, email, password, role }: RegisterDto) {
     const user = await this.usersService.findOneByEmail(email);
     
     if (user) {
       throw new BadRequestException('El usuario ya existe');
     }
 
-    return await this.usersService.create({name,email,password: await bcrypt.hash(password, 10)});
+    return await this.usersService.create({name,email,password: await bcrypt.hash(password, 10),role});
   }
 
   async login({ email, password }: LoginDto) {
@@ -37,8 +37,8 @@ export class AuthService {
       throw new UnauthorizedException('password incorrecto');
     }
 
-    // const payload = { email: user.email, role: user.role };
-    const payload = { email: user.email };
+    const payload = { email: user.email, role: user.role };
+    //const payload = { email: user.email };
     const access_token = await this.jwtService.signAsync(payload);
 
     return {

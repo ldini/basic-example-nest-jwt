@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { AuthGuard } from './auth.guard';
+import { request } from 'http';
+import { Role } from 'src/common/enum/role.enum';
 
 @Controller('auth')
 export class AuthController {
@@ -22,8 +24,10 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Get('profile')
-  getProfile() {
-    return "entramos";
+  getProfile(@Req() request) {
+    if(request.user.role !== Role.ADMIN)
+      return "eres un usuario normal"
+    return request.user;
   }
 
   // @Post()

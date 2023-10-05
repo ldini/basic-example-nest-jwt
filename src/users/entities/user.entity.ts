@@ -1,4 +1,5 @@
 // import { Role } from 'src/common/enum/rol.enum';
+import { Role } from 'src/common/enum/role.enum';
 import {
   Column,
   DeleteDateColumn,
@@ -20,16 +21,16 @@ export class User {
   @Column()
   password: string;
 
-//   @Column({ type: 'enum', default: Role.USER, enum: Role })
-//   role: Role;
+  @Column({ type: 'enum', default: Role.USER, enum: Role })
+  role: string;
 
-//   @DeleteDateColumn()
-//   deletedAt: Date;
+  // @DeleteDateColumn()
+  // deletedAt: Date;
 
-  constructor(name:string,email:string,password:string){
+  constructor(name:string,email:string,password:string,role?:Role){
     this.name = name;
     this.email = email;
     this.password = password;
-
+    this.role = role;
   }
 }

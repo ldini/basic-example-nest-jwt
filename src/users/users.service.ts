@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { Role } from 'src/common/enum/role.enum';
 
 @Injectable()
 export class UsersService {
@@ -11,7 +12,7 @@ export class UsersService {
   ) {}
 
   create(createUserDto: CreateUserDto) {
-    const user = new User(createUserDto.name,createUserDto.email,createUserDto.password)
+    const user = new User(createUserDto.name,createUserDto.email,createUserDto.password,createUserDto.role)
     return this.userRepository.save(user);
   }
 
